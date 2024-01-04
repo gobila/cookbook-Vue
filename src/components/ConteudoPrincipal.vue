@@ -17,7 +17,7 @@ export default {
       <span class="subtitulo-lg sua-lista-texto"> Sua lista: </span>
       <ul v-if="ingredientes.length > 0" class="ingredientes-sua-lista">
         <li v-for="ingrediente in ingredientes" v-bind:key="ingrediente">
-          <Tag :texto="ingrediente" />
+          <Tag :texto="ingrediente" ativa />
         </li>
       </ul>
 
