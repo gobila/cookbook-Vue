@@ -1,5 +1,5 @@
 export default interface ICategorias {
   nome: string;
-  igredientes: string[];
+  ingredientes: string[];
   imagem: string;
 }
