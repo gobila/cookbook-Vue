@@ -2,12 +2,14 @@
 import type ICategorias from "@/interfaces/ICategorias";
 // esse propType ajuda na tipagem do proprio vueTS  deixando mais especifico e ajudando no auto complete
 import type { PropType } from "vue";
+import Tag from "./Tag.vue";
 
 export default {
   props: {
     // funciona de forma parecida ao que o propTypes faz em react porém dentro de um único obejto da propria prop
     categoria: { type: Object as PropType<ICategorias>, required: true },
   },
+  components: { Tag },
 };
 </script>
 
@@ -23,7 +25,7 @@ export default {
     </header>
     <ul class="categoria__ingredientes">
       <li v-for="ingrediente in categoria.ingredientes" :key="ingrediente">
-        {{ ingrediente }}
+        <Tag :texto="ingrediente" />
       </li>
     </ul>
   </article>
