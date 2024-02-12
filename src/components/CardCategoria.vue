@@ -3,13 +3,15 @@ import type ICategorias from "@/interfaces/ICategorias";
 // esse propType ajuda na tipagem do proprio vueTS  deixando mais especifico e ajudando no auto complete
 import type { PropType } from "vue";
 import Tag from "./Tag.vue";
+import IngredienteSelecionado from "./IngredienteSelecionado.vue";
 
 export default {
   props: {
     // funciona de forma parecida ao que o propTypes faz em react porém dentro de um único obejto da propria prop
     categoria: { type: Object as PropType<ICategorias>, required: true },
   },
-  components: { Tag },
+  components: { Tag, IngredienteSelecionado },
+  emits: ["adicionarIngrediente", "removerIngrediente"],
 };
 </script>
 
@@ -25,7 +27,13 @@ export default {
     </header>
     <ul class="categoria__ingredientes">
       <li v-for="ingrediente in categoria.ingredientes" :key="ingrediente">
-        <Tag :texto="ingrediente" />
+        <!-- v-on:click tambem pode ser @click o @ serve como atalho nesse caso -->
+        <!-- o $event aqui funciona como uma palavra chave pegando o ingrediente (ou qualquer coisa passada no evento) -->
+        <IngredienteSelecionado
+          :ingrediente="ingrediente"
+          @adicionar-ingrediente="$emit('adicionarIngrediente', $event)"
+          @remover-ingrediente="$emit('removerIngrediente', $event)"
+        />
       </li>
     </ul>
   </article>

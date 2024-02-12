@@ -1,13 +1,30 @@
 <script lang="ts">
+import MostrarReceitas from "./MostrarReceitas.vue";
 import SelecionarIngredientes from "./SelecionarIngredientes.vue";
 import Tag from "./Tag.vue";
+
+type Pagina = "SelecionarIngredientes" | "MostrarReceitas";
 export default {
   data() {
     return {
-      ingredientes: ["alho", "manteiga", "orégano"],
+      ingredientes: [] as string[],
+      conteudo: "SelecionarIngredientes" as Pagina,
     };
   },
-  components: { SelecionarIngredientes, Tag },
+  components: { SelecionarIngredientes, Tag, MostrarReceitas },
+  methods: {
+    adicionarIngredientes(ingrediente: string) {
+      this.ingredientes.push(ingrediente);
+    },
+    removerIngredientes(ingrediente: string) {
+      this.ingredientes = this.ingredientes.filter(
+        (iLista) => ingrediente !== iLista
+      );
+    },
+    navegar(pagina: Pagina) {
+      this.conteudo = pagina;
+    },
+  },
 };
 </script>
 
@@ -29,7 +46,23 @@ export default {
         Sua lista está vazia, selecione ingredientes para iniciar.
       </p>
     </section>
-    <SelecionarIngredientes />
+    <!-- KeepAlive serve para preservar o estado do componente que estao dentro dele atraves de cache, o
+    parametro include serve para cacher apenas o que se quer fazendo um filtro dentro de tudo q esta dentro do KeepAlive
+    é necessario adicionar a propriedade name no componente que está no include -->
+    <!-- Aqui em SelecionarIngredientes o $event esta pegando o dado do evento que é o ingrediente, meio que funcionando como o event.target  -->
+    <KeepAlive include="SelecionarIngredientes">
+      <SelecionarIngredientes
+        v-if="conteudo === 'SelecionarIngredientes'"
+        @adicionar-ingrediente="adicionarIngredientes($event)"
+        @remover-ingrediente="removerIngredientes($event)"
+        @buscar-receitas="navegar('MostrarReceitas')"
+      />
+      <MostrarReceitas
+        v-else-if="conteudo === 'MostrarReceitas'"
+        :ingredientes="ingredientes"
+        @editar-receitas="navegar('SelecionarIngredientes')"
+      />
+    </KeepAlive>
   </main>
 </template>
 
